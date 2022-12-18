@@ -1,0 +1,73 @@
+------------------ MINI RA SPECIFICATION -------------------------
+
+Goal	::=	"MAIN" "[" IntegerLiteral "]" "[" IntegerLiteral "]" "[" IntegerLiteral "]" StmtList "END" ( SpillInfo )? ( Procedure )* <EOF>
+StmtList	::=	( ( Label )? Stmt )*
+Procedure	::=	Label "[" IntegerLiteral "]" "[" IntegerLiteral "]" "[" IntegerLiteral "]" StmtList "END" ( SpillInfo )?
+Stmt	::=	NoOpStmt
+        |	ErrorStmt
+        |	CJumpStmt
+        |	JumpStmt
+        |	HStoreStmt
+        |	HLoadStmt
+        |	MoveStmt
+        |	PrintStmt
+        |	ALoadStmt
+        |	AStoreStmt
+        |	PassArgStmt
+        |	CallStmt
+NoOpStmt	::=	"NOOP"
+ErrorStmt	::=	"ERROR"
+CJumpStmt	::=	"CJUMP" Reg Label
+JumpStmt	::=	"JUMP" Label
+HStoreStmt	::=	"HSTORE" Reg IntegerLiteral Reg
+HLoadStmt	::=	"HLOAD" Reg Reg IntegerLiteral
+MoveStmt	::=	"MOVE" Reg Exp
+PrintStmt	::=	"PRINT" SimpleExp
+ALoadStmt	::=	"ALOAD" Reg SpilledArg
+AStoreStmt	::=	"ASTORE" SpilledArg Reg
+PassArgStmt	::=	"PASSARG" IntegerLiteral Reg
+CallStmt	::=	"CALL" SimpleExp
+Exp	::=	HAllocate
+    |	BinOp
+    |	SimpleExp
+HAllocate	::=	"HALLOCATE" SimpleExp
+BinOp	::=	Operator Reg SimpleExp
+Operator	::=	"LE"
+            |	"NE"
+            |	"PLUS"
+            |	"MINUS"
+            |	"TIMES"
+            |	"DIV"
+SpilledArg	::=	"SPILLEDARG" IntegerLiteral
+SimpleExp	::=	Reg
+            |	IntegerLiteral
+            |	Label
+Reg	::=	"a0"
+    |	"a1"
+    |	"a2"
+    |	"a3"
+    |	"t0"
+    |	"t1"
+    |	"t2"
+    |	"t3"
+    |	"t4"
+    |	"t5"
+    |	"t6"
+    |	"t7"
+    |	"s0"
+    |	"s1"
+    |	"s2"
+    |	"s3"
+    |	"s4"
+    |	"s5"
+    |	"s6"
+    |	"s7"
+    |	"t8"
+    |	"t9"
+    |	"v0"
+    |	"v1"
+IntegerLiteral	::=	<INTEGER_LITERAL>
+Label	::=	<IDENTIFIER>
+SpillInfo	::=	"//" SpillStatus
+SpillStatus	::=	<SPILLED>
+            |	<NOTSPILLED>
